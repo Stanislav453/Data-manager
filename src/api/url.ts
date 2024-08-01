@@ -1,0 +1,1 @@
+export const API_URL = "https://inqool-interview-api.vercel.app/api/";
