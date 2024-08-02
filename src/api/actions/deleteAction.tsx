@@ -13,7 +13,6 @@ export const deleteAction = ({ variant, id }: deleteActionType) => {
   try {
     axios.delete(`${API_URL}${variant}/${id}`);
 
-    console.log(`${API_URL}${variant}/${id}`);
 
     // const data = response.data;
     // deleteData(id);
