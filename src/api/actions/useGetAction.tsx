@@ -7,7 +7,7 @@ export const useGetAction = (variant: string) => {
   const setAppData = useAppData((state) => state.setData);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const getData = async () => {
       try {
         const response = await axios.get(`${API_URL}${variant}`);
         const data = response.data;
@@ -17,6 +17,6 @@ export const useGetAction = (variant: string) => {
       }
     };
 
-    fetchData();
+    getData();
   }, [variant, setAppData]);
 };
