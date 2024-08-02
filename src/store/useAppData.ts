@@ -5,6 +5,7 @@ type UseAppDataType = {
   data: DataType[];
   filterData: DataType[];
   setData: (data: DataType[]) => void;
+  deleteData: (id: string) => void;
 };
 
 export const useAppData = create<UseAppDataType>()((set) => ({
@@ -15,5 +16,10 @@ export const useAppData = create<UseAppDataType>()((set) => ({
     set(() => ({
       data: data,
       filterData: data,
+    })),
+
+  deleteData: (id) =>
+    set((state) => ({
+      filterData: state.filterData.filter((oneResult) => oneResult.id !== id),
     })),
 }));
