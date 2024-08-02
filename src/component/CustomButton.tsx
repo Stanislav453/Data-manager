@@ -14,6 +14,7 @@ export const CustomButton = ({
   return (
     <button
       onClick={action}
+      type='submit'
       className={` py-2 px-4 text-white ${customStyle} rounded-full hover:scale-110 transition-transform `}
     >
       {children}
