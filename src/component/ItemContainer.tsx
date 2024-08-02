@@ -29,7 +29,7 @@ export const ItemContainer = () => {
         </CustomButton>
       </div>
       <ul className="flex flex-col gap-3     ">
-        <Item data={appData} />
+        <Item variant={variant} data={appData} />
       </ul>
     </main>
   );
