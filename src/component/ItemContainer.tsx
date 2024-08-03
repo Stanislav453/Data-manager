@@ -20,17 +20,17 @@ export const ItemContainer = () => {
       <div className='flex gap-3 py-3'>
         <CustomButton
           action={() => setVariant('users')}
-          customStyle='bg-gray-500'
+          customStyle='bg-gray-500 self-end'
         >
           Users
         </CustomButton>
         <CustomButton
           action={() => setVariant('animals')}
-          customStyle='bg-gray-500'
+          customStyle='bg-gray-500 self-end'
         >
           Animals
         </CustomButton>
-        {variant === 'users' ? <CreateUserForm /> : <CreateAnimalForm />}
+        {variant === 'users' ? <CreateUserForm /> : <CreateAnimalForm variant={variant} />}
 
       </div>
       <ul className='flex flex-col gap-3     '>
