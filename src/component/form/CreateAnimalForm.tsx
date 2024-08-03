@@ -1,9 +1,16 @@
-import React from 'react';
-import { CustomButton } from '../CustomButton';
+import { v4 as uuidv4 } from 'uuid';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { CustomButton } from '../CustomButton';
+import { postAction } from '../../api/actions/postAction';
 
-export const CreateAnimalForm = () => {
+type CreateAnimalFormType = {
+  variant: string;
+};
+
+export const CreateAnimalForm = ({ variant }: CreateAnimalFormType) => {
+  // const updateData = useAppData((state) => state.updateData);
+
   const minLetterName = 4;
   const minLetterNameError = ` min ${minLetterName} characters`;
   const onlyLetterError = 'Only letters';
@@ -12,6 +19,7 @@ export const CreateAnimalForm = () => {
   const required = 'Is required';
 
   type FormType = {
+    id: string;
     name: string;
     type: string;
     age: number;
@@ -19,8 +27,9 @@ export const CreateAnimalForm = () => {
 
   const formik = useFormik<FormType>({
     initialValues: {
+      id: uuidv4(),
       name: '',
-      type: '',
+      type: 'dog',
       age: 1,
     },
     validationSchema: Yup.object({
@@ -29,32 +38,26 @@ export const CreateAnimalForm = () => {
         .matches(/^[A-Za-z]+$/, onlyLetterError)
         .required(required),
       type: Yup.string(),
-      age: Yup.number().min(minAge, ageError),
+      age: Yup.number().min(minAge, ageError).required(required),
     }),
-    validate: (values) => {
-      const errors: Partial<FormType> = {};
-      if (values.age < minAge) {
-        values.age = minAge;
-      }
-      return errors;
-    },
+
     onSubmit: async (values: FormType, { resetForm }) => {
-      if (!values.name || !values.age || !values.type) {
+      if (values.name || values.age || values.type) {
+        values.id = uuidv4();
+        // updateData(values);
+        postAction({ variant, values });
+        resetForm();
+      } else {
         //Create validation error
         console.log('error');
-        
         return;
-    }
-    
-    console.log('This is update Value', values.name, values.age, values.type);
-
-      resetForm();
+      }
     },
   });
 
   return (
     <form onSubmit={formik.handleSubmit} className='flex gap-3 item-center'>
-      <div className='flex flex-col'>
+      <div className='flex flex-col self-end'>
         <label
           className={`${
             formik.touched.name && formik.errors.name
@@ -68,48 +71,63 @@ export const CreateAnimalForm = () => {
             : 'Name'}
         </label>
         <input
-          className='drop-shadow-md'
+          className='drop-shadow-md p-1.5 rounded-lg'
           type='text'
           name='name'
           onChange={formik.handleChange}
           value={formik.values.name}
         />
       </div>
-      <div className='flex flex-col'>
-        <label htmlFor='age'>Age</label>
+      <div className='flex flex-col self-end'>
+        <label
+          className={`${
+            formik.touched.age && formik.errors.age
+              ? 'text-red-500'
+              : 'text-black'
+          }`}
+          htmlFor='age'
+        >
+          {formik.touched.age && formik.errors.age ? formik.errors.age : 'Age'}
+        </label>
         <input
-          className='drop-shadow-md'
+          className='drop-shadow-md p-1.5 rounded-lg'
           name='age'
           type='number'
           onChange={formik.handleChange}
           value={formik.values.age}
         />
       </div>
-      <div className='self-end'>
+      <div className='flex flex-col self-end'>
+        <label
+          className={`${
+            formik.touched.type && formik.errors.type
+              ? 'text-red-500'
+              : 'text-black'
+          }`}
+          htmlFor='type'
+        >
+          {formik.touched.type && formik.errors.type
+            ? formik.errors.type
+            : 'type'}
+        </label>
         <select
           name='type'
           onChange={formik.handleChange}
           value={formik.values.type}
-          className='flex-none w-26 p-2 ml-[21px] rounded-lg bg-gray-100 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+          className='flex-none w-26 p-2 rounded-lg bg-gray-100 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
         >
           <option value='dog'>Dog</option>
           <option value='cat'>Cat</option>
           <option value='other'>Other</option>
         </select>
       </div>
-      <button
-        onClick={formik.submitForm}
-        type='button'
-        className=' font-semibold bg-blue-500'
-      >
-        Cereate item
-      </button>
-      {/* <CustomButton
-        customStyle=' font-semibold bg-blue-500'
+
+      <CustomButton
+        customStyle=' font-semibold bg-blue-500 self-end'
         action={formik.submitForm}
       >
         Add animal
-      </CustomButton> */}
+      </CustomButton>
     </form>
   );
 };
