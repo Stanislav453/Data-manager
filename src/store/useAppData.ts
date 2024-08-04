@@ -9,6 +9,8 @@ type UseAppDataType = {
   updateData: (item: DataType) => void;
   updateBan: (id: string) => void;
   editItem: (id: string, changeItem: DataType) => void;
+  filterItems: (itemName: string) => void;
+  updatePostData: (oneItem: DataType) => void;
 };
 
 export const useAppData = create<UseAppDataType>()((set) => ({
@@ -19,6 +21,19 @@ export const useAppData = create<UseAppDataType>()((set) => ({
     set(() => ({
       data: data,
       filterData: data,
+    })),
+
+  updatePostData: (oneItem) =>
+    set((state) => ({
+      data: [ ...state.data, oneItem],
+      filterData: [ ...state.filterData, oneItem],
+    })),
+
+  filterItems: (itemName) =>
+    set((state) => ({
+      filterData: state.data.filter((item) =>
+        item.name.toLowerCase().includes(itemName.toLowerCase())
+      ),
     })),
 
   deleteData: (id) =>
