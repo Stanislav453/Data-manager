@@ -1,5 +1,5 @@
 export type DataType = {
-  id: string;
+  id?: string;
   name: string;
   gender?: string;
   banned?: boolean;
