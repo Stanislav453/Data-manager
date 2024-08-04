@@ -2,22 +2,21 @@ import axios from 'axios';
 import { API_URL } from '../url';
 import { useAppData } from '../../store/useAppData';
 
-type postActionType = {
+type PostActionType<T> = {
   variant: string;
   id: string;
+  values: T;
 };
 
-export const updateAction = async ({ variant, id }: postActionType) => {
-  const { filterData, updateBan } = useAppData.getState();
-  const filterItem = filterData.find((item) => item.id == id);
-  const newBan = filterItem?.banned;
-  
+export const updateAction = async <T>({
+  variant,
+  id,
+  values,
+}: PostActionType<T>) => {
+  const { updateBan } = useAppData.getState();
+
   try {
-      const response = await axios.patch(`${API_URL}${variant}/${id}`, {
-          banned: !newBan,
-        });
-        console.log('this is response from PUT', response.data);
-        updateBan(id);
+    await axios.patch(`${API_URL}${variant}/${id}`, values);
   } catch (e) {
     console.log('ERROR', e);
   }
