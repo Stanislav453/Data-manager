@@ -32,7 +32,7 @@ export const CreateAnimalForm = ({ variant }: CreateAnimalFormType) => {
     validationSchema: Yup.object({
       name: Yup.string()
         .min(minLetterName, minLetterNameError)
-        .matches(/^[A-Za-z]+$/, onlyLetterError)
+        .matches(/^[A-Za-z\s]+$/, onlyLetterError)
         .required(required),
       type: Yup.string(),
       age: Yup.number().min(minAge, ageError).required(required),
@@ -52,7 +52,10 @@ export const CreateAnimalForm = ({ variant }: CreateAnimalFormType) => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} className='flex gap-3 item-center'>
+    <form
+      onSubmit={formik.handleSubmit}
+      className='flex flex-wrap justify-center self-end gap-3 item-center p-3 bg-gray-200 rounded-full'
+    >
       <div className='flex flex-col self-end'>
         <label
           className={`${
@@ -62,14 +65,13 @@ export const CreateAnimalForm = ({ variant }: CreateAnimalFormType) => {
           }`}
           htmlFor='name'
         >
-          {formik.touched.name && formik.errors.name
-            ? formik.errors.name
-            : 'Name'}
+          {formik.touched.name && formik.errors.name ? formik.errors.name : ''}
         </label>
         <input
           className='drop-shadow-md p-1.5 rounded-lg'
           type='text'
           name='name'
+          placeholder='Name'
           onChange={formik.handleChange}
           value={formik.values.name}
         />
@@ -91,6 +93,7 @@ export const CreateAnimalForm = ({ variant }: CreateAnimalFormType) => {
           type='number'
           onChange={formik.handleChange}
           value={formik.values.age}
+          placeholder='Age'
         />
       </div>
       <div className='flex flex-col self-end'>
@@ -120,6 +123,7 @@ export const CreateAnimalForm = ({ variant }: CreateAnimalFormType) => {
 
       <CustomButton
         customStyle=' font-semibold bg-blue-500 self-end'
+        type='button'
         action={formik.submitForm}
       >
         Add animal
