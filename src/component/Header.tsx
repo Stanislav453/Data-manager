@@ -1,4 +1,3 @@
-import React from "react";
 
 export const Header = () => (
   <header className="w-full h-auto p-4 shadow-md">

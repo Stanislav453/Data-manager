@@ -2,7 +2,7 @@ import axios from 'axios';
 import { API_URL } from '../url';
 import { useEffect } from 'react';
 import { useAppData } from '../../store/useAppData';
-import { postAction } from './postAction';
+// import { postAction } from './postAction';
 
 export const useGetAction = (variant: string) => {
   const setAppData = useAppData((state) => state.setData);

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { API_URL } from '../url';
-import { useAppData } from '../../store/useAppData';
+// import { useAppData } from '../../store/useAppData';
 
 type PostActionType<T> = {
   variant: string;
@@ -13,7 +13,7 @@ export const updateAction = async <T>({
   id,
   values,
 }: PostActionType<T>) => {
-  const { updateBan } = useAppData.getState();
+  // const { updateBan } = useAppData.getState();
 
   try {
     await axios.patch(`${API_URL}${variant}/${id}`, values);
