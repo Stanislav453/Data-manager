@@ -13,7 +13,6 @@ export const postAction = async ({ variant, values }: postActionType) => {
 
   try {
     const response = await axios.post(`${API_URL}${variant}`, values);
-    console.log('this is response from POST', response.data);
     updateData(response.data);
   } catch (e) {
     console.log('ERROR', e);

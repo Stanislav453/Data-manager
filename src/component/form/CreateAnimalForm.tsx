@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { CustomButton } from '../CustomButton';
@@ -19,7 +18,6 @@ export const CreateAnimalForm = ({ variant }: CreateAnimalFormType) => {
   const required = 'Is required';
 
   type FormType = {
-    id: string;
     name: string;
     type: string;
     age: number;
@@ -27,7 +25,6 @@ export const CreateAnimalForm = ({ variant }: CreateAnimalFormType) => {
 
   const formik = useFormik<FormType>({
     initialValues: {
-      id: uuidv4(),
       name: '',
       type: 'dog',
       age: 1,
@@ -43,7 +40,6 @@ export const CreateAnimalForm = ({ variant }: CreateAnimalFormType) => {
 
     onSubmit: async (values: FormType, { resetForm }) => {
       if (values.name || values.age || values.type) {
-        values.id = uuidv4();
         // updateData(values);
         postAction({ variant, values });
         resetForm();
