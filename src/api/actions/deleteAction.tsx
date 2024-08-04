@@ -1,6 +1,5 @@
-import axios from "axios";
-import { API_URL } from "../url";
-import { useAppData } from "../../store/useAppData";
+import axios from 'axios';
+import { API_URL } from '../url';
 
 type deleteActionType = {
   variant: string;
@@ -8,15 +7,9 @@ type deleteActionType = {
 };
 
 export const deleteAction = ({ variant, id }: deleteActionType) => {
-  // const deleteData = useAppData((state) => state.filterData);
-
   try {
     axios.delete(`${API_URL}${variant}/${id}`);
-
-
-    // const data = response.data;
-    // deleteData(id);
   } catch (e) {
-    console.log("ERROR", e);
+    console.log('ERROR', e);
   }
 };
