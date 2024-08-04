@@ -1,14 +1,13 @@
 import axios from 'axios';
 import { API_URL } from '../url';
-import { DataType } from '../../type';
 import { useAppData } from '../../store/useAppData';
 
-type postActionType = {
+type PostActionType<T> = {
   variant: string;
-  values: DataType;
+  values: T;
 };
 
-export const postAction = async ({ variant, values }: postActionType) => {
+export const postAction = async <T>({ variant, values }: PostActionType<T>) => {
   const updateData = useAppData.getState().updateData;
 
   try {
@@ -17,5 +16,4 @@ export const postAction = async ({ variant, values }: postActionType) => {
   } catch (e) {
     console.log('ERROR', e);
   }
-  console.log('This is API link', `${API_URL}${variant}`);
 };
