@@ -1,28 +1,89 @@
 import { useFormik } from 'formik';
-import * as Yup from "yup"
+import * as Yup from 'yup';
 import { CustomButton } from '../CustomButton';
+import { postAction } from '../../api/actions/postAction';
 
-export const CreateUserForm = () => {
+type CreateUserFormType = {
+  variant: string;
+};
+
+export const CreateUserForm = ({ variant }: CreateUserFormType) => {
+  const minLetterName = 4;
+  const minLetterNameError = ` min ${minLetterName} characters`;
+  const onlyLetterError = 'Only letters';
+  const required = 'Is required';
+
+  type FormType = {
+    name: string;
+    gender: string;
+    banned: false;
+  };
+
+  const formik = useFormik<FormType>({
+    initialValues: {
+      name: '',
+      gender: 'male',
+      banned: false,
+    },
+    validationSchema: Yup.object({
+      name: Yup.string()
+        .min(minLetterName, minLetterNameError)
+        .matches(/^[A-Za-z\s]+$/, onlyLetterError)
+        .required(required),
+      gender: Yup.string(),
+    }),
+
+    onSubmit: async (values: FormType, { resetForm }) => {
+      if (values.name || values.gender) {
+        postAction({ variant, values });
+
+        resetForm();
+      } else {
+        console.log('error');
+        return;
+      }
+    },
+  });
+
   return (
-    <form className='flex gap-3 item-ceter'>
+    <form onSubmit={formik.handleSubmit} className='flex gap-3 item-center'>
       <div className='flex flex-col'>
-        <label htmlFor='name'>Name</label>
-        <input className='drop-shadow-md' type='text' name='name' />
+        <label
+          className={`${
+            formik.touched.name && formik.errors.name
+              ? 'text-red-500'
+              : 'text-black'
+          }`}
+          htmlFor='name'
+        >
+          {formik.touched.name && formik.errors.name
+            ? formik.errors.name
+            : 'Name'}
+        </label>
+        <input
+          className='drop-shadow-md p-1.5'
+          type='text'
+          name='name'
+          onChange={formik.handleChange}
+          value={formik.values.name}
+        />
       </div>
       <div className='self-end'>
         <select
-          id='task-tag'
-          name='tag'
-          // onChange={handleChange}
-          // value={updateTask.tag}
-          className='flex-none w-26 p-2 ml-[21px] rounded-lg bg-gray-100 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+          className='flex-none w-26 p-2 rounded-lg bg-gray-100 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+          name='gender'
+          onChange={formik.handleChange}
+          value={formik.values.gender}
         >
           <option value='male'>Male</option>
           <option value='female'>Female</option>
           <option value='other'>Other</option>
         </select>
       </div>
-      <CustomButton customStyle=' font-semibold bg-blue-500'>
+      <CustomButton
+        customStyle='self-end font-semibold bg-blue-500'
+        action={formik.submitForm}
+      >
         Cereate item
       </CustomButton>
     </form>
