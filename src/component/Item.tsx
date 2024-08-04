@@ -7,6 +7,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useState } from 'react';
 import { IoCloseCircle } from 'react-icons/io5';
 import * as Yup from 'yup';
+import { updateAction } from '../api/actions/updateAction';
 
 type ItemProps = {
   data: DataType[];
@@ -14,17 +15,22 @@ type ItemProps = {
   action: (id: string) => void;
 };
 
+const minAge = 1;
+const ageError = 'Age cant be under 1';
+const nameError = 'No numbers';
+const required = 'required';
+
 const validationSchema = Yup.object().shape({
   name: Yup.string()
-    .required('Name is required')
-    .matches(/^[a-zA-Z\s]+$/, 'Name cannot contain numbers'),
+    .required(required)
+    .matches(/^[a-zA-Z\s]+$/, nameError),
+  age: Yup.number().min(minAge, ageError).required(required),
 });
 
 export const Item = ({ data, variant, action }: ItemProps) => {
   const [editId, setEditId] = useState('');
   const updateData = useAppData((state) => state.deleteData);
   const editItem = useAppData((state) => state.editItem);
-
 
   const handleDeleteData = (id: string) => {
     updateData(id);
@@ -36,8 +42,10 @@ export const Item = ({ data, variant, action }: ItemProps) => {
   };
 
   const handleSubmit = (values: DataType) => {
+    updateAction({ variant, id: editId, values: values });
     editItem(editId, values);
     setEditId('');
+    console.log('this is values');
   };
 
   return data.map((oneResult, index) => {
@@ -79,7 +87,7 @@ export const Item = ({ data, variant, action }: ItemProps) => {
                     />
                     <ErrorMessage
                       name='name'
-                      component='div'
+                      component='p'
                       className='text-red-500'
                     />
                   </div>
@@ -95,11 +103,18 @@ export const Item = ({ data, variant, action }: ItemProps) => {
                     </Field>
                   )}
                   {age && (
-                    <Field
-                      className='drop-shadow-md p-1.5 rounded-lg'
-                      type='number'
-                      name='age'
-                    />
+                    <div>
+                      <Field
+                        className='drop-shadow-md p-1.5 rounded-lg'
+                        type='number'
+                        name='age'
+                      />
+                      <ErrorMessage
+                        name='age'
+                        component='p'
+                        className='text-red-500'
+                      />
+                    </div>
                   )}
                   {type && (
                     <Field
