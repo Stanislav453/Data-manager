@@ -32,40 +32,43 @@ export const CreateUserForm = ({ variant }: CreateUserFormType) => {
         .required(required),
       gender: Yup.string(),
     }),
-
+    validateOnChange: true,
     onSubmit: async (values: FormType, { resetForm }) => {
       if (values.name || values.gender) {
         postAction({ variant, values });
 
-        resetForm();
       } else {
         console.log('error');
         return;
       }
+      resetForm();
     },
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} className='flex gap-3 item-center'>
-      <div className='flex flex-col'>
+    <form
+      onSubmit={formik.handleSubmit}
+      className='flex flex-wrap justify-center self-end gap-3 item-center p-3 bg-gray-200 rounded-full'
+    >
+      <div className='flex flex-col justify-end'>
         <label
           className={`${
             formik.touched.name && formik.errors.name
               ? 'text-red-500'
               : 'text-black'
-          }`}
+          } text-center`}
           htmlFor='name'
         >
-          {formik.touched.name && formik.errors.name
-            ? formik.errors.name
-            : 'Name'}
+          {formik.touched.name && formik.errors.name ? formik.errors.name : ''}
         </label>
         <input
-          className='drop-shadow-md p-1.5'
+          className='drop-shadow-md p-1.5 rounded-full'
           type='text'
           name='name'
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           value={formik.values.name}
+          placeholder='Name'
         />
       </div>
       <div className='self-end'>
@@ -82,6 +85,7 @@ export const CreateUserForm = ({ variant }: CreateUserFormType) => {
       </div>
       <CustomButton
         customStyle='self-end font-semibold bg-blue-500'
+        type='button'
         action={formik.submitForm}
       >
         Cereate item
