@@ -66,9 +66,9 @@ export const Item = ({ data, variant, action }: ItemProps) => {
     return (
       <li
         key={index}
-        className={`flex w-full justify-between items-center p-4 list-none ${isBannedBorderColor} border-2`}
+        className={`flex flex-wrap sm:flex-nowrap justify-center sm:justify-between items-center gap-5 w-full p-4 list-none ${isBannedBorderColor} border-2`}
       >
-        <div className='flex gap-2 w-full'>
+        <div className='flex gap-2 w-full justify-center sm:justify-start'>
           {isEdit ? (
             <Formik
               initialValues={
@@ -128,7 +128,7 @@ export const Item = ({ data, variant, action }: ItemProps) => {
                     </Field>
                   )}
                   <CustomButton customStyle='bg-orange-500'>
-                    Change item
+                    Change item L{' '}
                   </CustomButton>
                 </Form>
               )}
@@ -161,7 +161,7 @@ export const Item = ({ data, variant, action }: ItemProps) => {
           )}
         </div>
         <div className='flex'>
-          <CustomButton action={() => handleEditItem(id)}>
+          <CustomButton action={() => handleEditItem(id)} >
             {editIconVariant}
           </CustomButton>
           <CustomButton action={() => handleDeleteData(id)}>
