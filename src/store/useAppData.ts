@@ -7,6 +7,8 @@ type UseAppDataType = {
   setData: (data: DataType[]) => void;
   deleteData: (id: string) => void;
   updateData: (item: DataType) => void;
+  updateBan: (id: string) => void;
+  editItem: (id: string, changeItem: DataType) => void;
 };
 
 export const useAppData = create<UseAppDataType>()((set) => ({
@@ -27,5 +29,19 @@ export const useAppData = create<UseAppDataType>()((set) => ({
   updateData: (item) =>
     set((state) => ({
       filterData: [...state.filterData, item],
+    })),
+
+  updateBan: (id) =>
+    set((state) => ({
+      filterData: state.filterData.map((oneItem) =>
+        oneItem.id === id ? { ...oneItem, banned: !oneItem.banned } : oneItem
+      ),
+    })),
+
+  editItem: (id, changeItem) =>
+    set((state) => ({
+      filterData: state.filterData.map((oneItem) =>
+        oneItem.id === id ? { ...oneItem, ...changeItem } : oneItem
+      ),
     })),
 }));
