@@ -15,22 +15,30 @@ import { minAge, ageError } from '../constants';
 type ItemProps = {
   data: DataType[];
   variant: string;
-  error: unknown;
   loading: boolean;
   action: (id: string) => void;
 };
 
-const validationSchema = Yup.object().shape({
-  name: Yup.string()
-    .required(required)
-    .matches(/^[a-zA-Z\s]+$/, onlyLetters),
-  age: Yup.number().min(minAge, ageError).required(required),
-});
-
-export const Item = ({ data, variant, loading, error, action }: ItemProps) => {
+export const Item = ({ data, variant, loading, action }: ItemProps) => {
   const [editId, setEditId] = useState('');
   const updateData = useAppData((state) => state.deleteData);
   const editItem = useAppData((state) => state.editItem);
+  const error = useAppData((state) => state.error);
+
+  const validationSchema = Yup.object().shape(
+    variant === DEFAULT
+      ? {
+          name: Yup.string()
+            .required(required)
+            .matches(/^[a-zA-Z\s]+$/, onlyLetters),
+        }
+      : {
+          name: Yup.string()
+            .required(required)
+            .matches(/^[a-zA-Z\s]+$/, onlyLetters),
+          age: Yup.number().min(minAge, ageError).required(required),
+        }
+  );
 
   const handleDeleteData = (id: string) => {
     updateData(id);
@@ -42,12 +50,16 @@ export const Item = ({ data, variant, loading, error, action }: ItemProps) => {
   };
 
   const handleSubmit = (values: DataType) => {
-    updateAction({ variant, id: editId, values: values });
+    updateAction({
+      variant,
+      id: editId,
+      values: values,
+    });
     editItem(editId, values);
     setEditId('');
   };
 
-  if(error){
+  if (error) {
     return (
       <p className='w-full text-center font-bold text-3xl text-red-500'>
         Something is wrong. Please try it later.
@@ -93,21 +105,21 @@ export const Item = ({ data, variant, loading, error, action }: ItemProps) => {
                   className='flex flex-wrap justify-center sm:justify-start gap-2 w-full'
                 >
                   <div className='flex flex-col'>
-                    <Field
-                      className='drop-shadow-md p-1.5 rounded-lg'
-                      type='text'
-                      name='name'
-                    />
                     <ErrorMessage
                       name='name'
                       component='p'
                       className='text-red-500'
                     />
+                    <Field
+                      className='drop-shadow-md p-1.5 rounded-lg'
+                      type='text'
+                      name='name'
+                    />
                   </div>
                   {gender && (
                     <Field
                       as='select'
-                      className='flex-none w-26 p-2 rounded-lg bg-gray-100 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                      className='flex-none self-end w-26 p-2 rounded-lg bg-gray-100 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                       name='gender'
                     >
                       <option value='male'>Male</option>
@@ -118,7 +130,7 @@ export const Item = ({ data, variant, loading, error, action }: ItemProps) => {
                   {age && (
                     <div>
                       <Field
-                        className='drop-shadow-md p-1.5 rounded-lg'
+                        className='self-end drop-shadow-md p-1.5 rounded-lg'
                         type='number'
                         name='age'
                       />
@@ -132,7 +144,7 @@ export const Item = ({ data, variant, loading, error, action }: ItemProps) => {
                   {type && (
                     <Field
                       as='select'
-                      className='flex-none w-26 p-2 rounded-lg bg-gray-100 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                      className='self-end flex-none w-26 p-2 rounded-lg bg-gray-100 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                       name='type'
                     >
                       <option value='dog'>Dog</option>
@@ -140,7 +152,10 @@ export const Item = ({ data, variant, loading, error, action }: ItemProps) => {
                       <option value='other'>Other</option>
                     </Field>
                   )}
-                  <CustomButton customStyle='bg-orange-500'>
+                  <CustomButton
+                    type='submit'
+                    customStyle=' self-end bg-orange-500'
+                  >
                     Change item
                   </CustomButton>
                 </Form>
@@ -173,8 +188,9 @@ export const Item = ({ data, variant, loading, error, action }: ItemProps) => {
             </>
           )}
         </div>
-        <div className='flex'>
+        <div className='flex gap-6'>
           <CustomButton
+            customStyle='!p-0'
             action={() => {
               id && handleEditItem(id);
             }}
@@ -182,6 +198,7 @@ export const Item = ({ data, variant, loading, error, action }: ItemProps) => {
             {editIconVariant}
           </CustomButton>
           <CustomButton
+            customStyle='!p-0'
             action={() => {
               id && handleDeleteData(id);
             }}
