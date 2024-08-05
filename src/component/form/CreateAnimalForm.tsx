@@ -11,20 +11,17 @@ import {
   minLetterNameError,
 } from '../../constants';
 
+type FormType = {
+  name: string;
+  type: string;
+  age: number;
+};
 
 type CreateAnimalFormType = {
   variant: string;
 };
 
 export const CreateAnimalForm = ({ variant }: CreateAnimalFormType) => {
-
-
-  type FormType = {
-    name: string;
-    type: string;
-    age: number;
-  };
-
   const formik = useFormik<FormType>({
     initialValues: {
       name: '',
@@ -69,7 +66,7 @@ export const CreateAnimalForm = ({ variant }: CreateAnimalFormType) => {
           {formik.touched.name && formik.errors.name ? formik.errors.name : ''}
         </label>
         <input
-          className='drop-shadow-md p-1.5 rounded-lg'
+          className='drop-shadow-md p-1.5 rounded-full'
           type='text'
           name='name'
           placeholder='Name'
@@ -77,7 +74,7 @@ export const CreateAnimalForm = ({ variant }: CreateAnimalFormType) => {
           value={formik.values.name}
         />
       </div>
-      <div className='flex flex-col self-end'>
+      <div className='flex flex-col self-end text-center'>
         <label
           className={`${
             formik.touched.age && formik.errors.age
@@ -89,7 +86,7 @@ export const CreateAnimalForm = ({ variant }: CreateAnimalFormType) => {
           {formik.touched.age && formik.errors.age ? formik.errors.age : 'Age'}
         </label>
         <input
-          className='drop-shadow-md p-1.5 rounded-lg'
+          className='max-w-14 drop-shadow-md p-1.5 rounded-full'
           name='age'
           type='number'
           onChange={formik.handleChange}
