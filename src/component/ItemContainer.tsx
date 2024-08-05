@@ -8,16 +8,17 @@ import { CreateUserForm } from './form/CreateUserForm';
 import { CreateAnimalForm } from './form/CreateAnimalForm';
 import { updateAction } from '../api/actions/updateAction';
 import { FilterItemsForm } from './form/FilterItemsForm';
+import { DEFAULT } from '../constants';
 
 export const ItemContainer = () => {
+  const [error, setError] = useState<unknown>();
+  const [loading, setLoading] = useState(true);
   const [variant, setVariant] = useState('users');
   const appData = useAppData((state) => state.filterData);
   const updateBan = useAppData((state) => state.updateBan);
-  // const buttonVariantColor =
-  //   variant === 'users' ? 'bg-gray-500' : 'bg-gray-5100';
+  const variantOption = variant === DEFAULT;
 
-  useGetAction(variant);
-  console.log(appData);
+  useGetAction({ variant, setLoading, setError });
 
   const handlleupdateItem = (id: string) => {
     const filterItem = appData.find((item) => item.id == id);
@@ -26,24 +27,33 @@ export const ItemContainer = () => {
     updateBan(id);
   };
 
+  const userAction = (variant: string) => {
+    setLoading(true);
+    setVariant(variant);
+  };
+
   return (
     <main className='w-full min-h-dvh py-5 px-3'>
       <div className='flex flex-wrap justify-center  ls:justify-between gap-6 py-3'>
         <div className='flex gap-3 self-end p-3 bg-gray-200 rounded-full'>
           <CustomButton
-            action={() => setVariant('users')}
-            customStyle={`bg-gray-500 self-end`}
+            action={() => userAction('users')}
+            customStyle={` ${
+              variantOption ? 'bg-gray-500' : 'bg-gray-300'
+            } self-end`}
           >
             Users
           </CustomButton>
           <CustomButton
-            action={() => setVariant('animals')}
-            customStyle='bg-gray-500 self-end'
+            action={() => userAction('animals')}
+            customStyle={` ${
+              !variantOption ? 'bg-gray-500' : 'bg-gray-300'
+            } self-end`}
           >
             Animals
           </CustomButton>
         </div>
-        {variant === 'users' ? (
+        {variantOption ? (
           <CreateUserForm variant={variant} />
         ) : (
           <CreateAnimalForm variant={variant} />
@@ -52,6 +62,8 @@ export const ItemContainer = () => {
       </div>
       <ul className='flex flex-col gap-3     '>
         <Item
+          loading={loading}
+          error={error}
           variant={variant}
           data={appData}
           action={(id) => handlleupdateItem(id)}
