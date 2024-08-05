@@ -8,17 +8,14 @@ type PostActionType<T> = {
 };
 
 export const postAction = async <T>({ variant, values }: PostActionType<T>) => {
-  // const updateData = useAppData.getState().updateData;
   const updatePostData = useAppData.getState().updatePostData;
+  const setError = useAppData.getState().setError;
 
   try {
     const response = await axios.post(`${API_URL}${variant}`, values);
-    // updateData(response.data);
     updatePostData(response.data);
-    // console.log("This is response data",response.data);
-
-    console.log('Data from post', response.data);
   } catch (e) {
+    setError(true);
     console.log('ERROR', e);
   }
 };

@@ -6,11 +6,11 @@ import { useAppData } from '../../store/useAppData';
 type UseGetActionType = {
   variant: string;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  setError: React.Dispatch<unknown>;
 };
 
-export const useGetAction = ({ variant, setLoading, setError }: UseGetActionType) => {
+export const useGetAction = ({ variant, setLoading }: UseGetActionType) => {
   const setAppData = useAppData((state) => state.setData);
+  const setError = useAppData((state) => state.setError);
 
   useEffect(() => {
     const getData = async () => {
@@ -19,7 +19,7 @@ export const useGetAction = ({ variant, setLoading, setError }: UseGetActionType
         const data = response.data;
         setAppData(data);
       } catch (e) {
-        setError(e)
+        setError(true);
         console.log('ERROR', e);
       } finally {
         setLoading(false);
@@ -27,5 +27,5 @@ export const useGetAction = ({ variant, setLoading, setError }: UseGetActionType
     };
 
     getData();
-  }, [variant, setAppData, setLoading]);
+  }, [variant, setAppData, setLoading, setError]);
 };
