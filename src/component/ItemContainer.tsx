@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useGetAction } from '../api/actions/useGetAction';
 import { useAppData } from '../store/useAppData';
 import { Item } from './Item';
@@ -11,20 +11,25 @@ import { FilterItemsForm } from './form/FilterItemsForm';
 import { DEFAULT } from '../constants';
 
 export const ItemContainer = () => {
+  const getVariant = localStorage.getItem('variant');
   const [loading, setLoading] = useState(true);
-  const [variant, setVariant] = useState('users');
+  const [variant, setVariant] = useState(getVariant || 'users');
   const appData = useAppData((state) => state.filterData);
   const updateBan = useAppData((state) => state.updateBan);
   const variantOption = variant === DEFAULT;
 
-  useGetAction({ variant, setLoading});
+  useGetAction({ variant, setLoading });
 
   const handlleupdateItem = (id: string) => {
     const filterItem = appData.find((item) => item.id == id);
     const newBan = { banned: !filterItem?.banned };
-    updateAction({ variant, id, values: newBan});
+    updateAction({ variant, id, values: newBan });
     updateBan(id);
   };
+
+  useEffect(() => {
+    localStorage.setItem('variant', variant);
+  }, [variant]);
 
   const handleSwitchData = (variant: string) => {
     setLoading(true);
@@ -36,7 +41,7 @@ export const ItemContainer = () => {
       <div className='flex flex-wrap justify-center  ls:justify-between gap-6 py-3'>
         <div className='flex gap-3 self-end p-3 bg-gray-200 rounded-full'>
           <CustomButton
-            action={() =>  handleSwitchData('users')}
+            action={() => handleSwitchData('users')}
             customStyle={` ${
               variantOption ? 'bg-gray-500' : 'bg-gray-300'
             } self-end`}
@@ -44,7 +49,7 @@ export const ItemContainer = () => {
             Users
           </CustomButton>
           <CustomButton
-            action={() =>  handleSwitchData('animals')}
+            action={() => handleSwitchData('animals')}
             customStyle={` ${
               !variantOption ? 'bg-gray-500' : 'bg-gray-300'
             } self-end`}
