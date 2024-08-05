@@ -38,11 +38,16 @@ export const CreateAnimalForm = ({ variant }: CreateAnimalFormType) => {
     }),
 
     onSubmit: async (values: FormType, { resetForm }) => {
-      if (values.name || values.age || values.type) {
-        postAction({ variant, values });
+      const trimmedValues = {
+        name: values.name.trim(),
+        age: values.age,
+        type: values.type,
+      };
+
+      if (trimmedValues.name || trimmedValues.age || trimmedValues.type) {
+        postAction({ variant, values: trimmedValues });
         resetForm();
       } else {
-        //Create validation error
         console.log('error');
         return;
       }

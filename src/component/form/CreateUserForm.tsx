@@ -9,7 +9,6 @@ import {
   minLetterNameError,
 } from '../../constants';
 
-
 type CreateUserFormType = {
   variant: string;
 };
@@ -20,8 +19,6 @@ type FormType = {
   banned: false;
 };
 export const CreateUserForm = ({ variant }: CreateUserFormType) => {
-
-
   const formik = useFormik<FormType>({
     initialValues: {
       name: '',
@@ -37,8 +34,16 @@ export const CreateUserForm = ({ variant }: CreateUserFormType) => {
     }),
     validateOnChange: true,
     onSubmit: async (values: FormType, { resetForm }) => {
-      if (values.name || values.gender) {
-        postAction({ variant, values });
+      const trimmedValues = {
+        name: values.name.trim(),
+        gender: values.gender,
+        banned: values.banned
+      };
+
+      if (trimmedValues.name || trimmedValues.gender) {
+        postAction({ variant, values: trimmedValues });
+        console.log(trimmedValues);
+        
       } else {
         console.log('error');
         return;
