@@ -3,7 +3,6 @@ import { useGetAction } from '../api/actions/useGetAction';
 import { useAppData } from '../store/useAppData';
 import { Item } from './Item';
 import { CustomButton } from './CustomButton';
-// import { CreateInputForm } from './form/CreateItemForm';
 import { CreateUserForm } from './form/CreateUserForm';
 import { CreateAnimalForm } from './form/CreateAnimalForm';
 import { updateAction } from '../api/actions/updateAction';
@@ -20,7 +19,7 @@ export const ItemContainer = () => {
 
   useGetAction({ variant, setLoading });
 
-  const handlleupdateItem = (id: string) => {
+  const handleUpdateItem = (id: string) => {
     const filterItem = appData.find((item) => item.id == id);
     const newBan = { banned: !filterItem?.banned };
     updateAction({ variant, id, values: newBan });
@@ -69,7 +68,7 @@ export const ItemContainer = () => {
           loading={loading}
           variant={variant}
           data={appData}
-          action={(id) => handlleupdateItem(id)}
+          action={(id) => handleUpdateItem(id)}
         />
       </ul>
     </main>
