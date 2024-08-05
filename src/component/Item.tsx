@@ -104,14 +104,14 @@ export const Item = ({ data, variant, loading, action }: ItemProps) => {
                   onSubmit={handleSubmit}
                   className='flex flex-wrap justify-center sm:justify-start gap-2 w-full'
                 >
-                  <div className='flex flex-col'>
+                  <div className='flex flex-col justify-end'>
                     <ErrorMessage
                       name='name'
                       component='p'
                       className='text-red-500'
                     />
                     <Field
-                      className='drop-shadow-md p-1.5 rounded-lg'
+                      className=' drop-shadow-md p-1.5 rounded-lg'
                       type='text'
                       name='name'
                     />
@@ -129,15 +129,15 @@ export const Item = ({ data, variant, loading, action }: ItemProps) => {
                   )}
                   {age && (
                     <div>
-                      <Field
-                        className='self-end drop-shadow-md p-1.5 rounded-lg'
-                        type='number'
-                        name='age'
-                      />
                       <ErrorMessage
                         name='age'
                         component='p'
                         className='text-red-500'
+                      />
+                      <Field
+                        className='max-w-16 self-end drop-shadow-md p-1.5 rounded-lg'
+                        type='number'
+                        name='age'
                       />
                     </div>
                   )}
@@ -165,24 +165,24 @@ export const Item = ({ data, variant, loading, action }: ItemProps) => {
             <>
               <div className='flex gap-2'>
                 <span className='font-bold'>Name: </span>
-                <h2>{name}</h2>
+                <h2 className='capitalize'>{name}</h2>
               </div>
               {gender && (
                 <div className='flex gap-2'>
                   <span className='font-bold'>Gender: </span>
-                  <h2>{gender}</h2>
+                  <h2 className='capitalize'>{gender}</h2>
                 </div>
               )}
               {age && (
                 <div className='flex gap-2'>
                   <span className='font-bold'>Age: </span>
-                  <h2>{age}</h2>
+                  <h2 className='capitalize'>{age}</h2>
                 </div>
               )}
               {type && (
                 <div className='flex gap-2'>
                   <span className='font-bold'>Type: </span>
-                  <h2>{type}</h2>
+                  <h2 className='capitalize'>{type}</h2>
                 </div>
               )}
             </>
