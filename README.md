@@ -2,7 +2,7 @@
 
    ```bash
    $ git clone https://github.com/Stanislav453/Data-manager.git
-   $ cd ./todo
+   $ cd ./Data-manager
    ```
 
 2. Install dependencies
