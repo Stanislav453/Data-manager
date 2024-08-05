@@ -2,20 +2,22 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { CustomButton } from '../CustomButton';
 import { postAction } from '../../api/actions/postAction';
+import {
+  required,
+  onlyLetters,
+  minAge,
+  ageError,
+  minLetterName,
+  minLetterNameError,
+} from '../../constants';
+
 
 type CreateAnimalFormType = {
   variant: string;
 };
 
 export const CreateAnimalForm = ({ variant }: CreateAnimalFormType) => {
-  // const updateData = useAppData((state) => state.updateData);
 
-  const minLetterName = 4;
-  const minLetterNameError = ` min ${minLetterName} characters`;
-  const onlyLetterError = 'Only letters';
-  const minAge = 1;
-  const ageError = 'Age cant be under 1';
-  const required = 'Is required';
 
   type FormType = {
     name: string;
@@ -32,7 +34,7 @@ export const CreateAnimalForm = ({ variant }: CreateAnimalFormType) => {
     validationSchema: Yup.object({
       name: Yup.string()
         .min(minLetterName, minLetterNameError)
-        .matches(/^[A-Za-z\s]+$/, onlyLetterError)
+        .matches(/^[A-Za-z\s]+$/, onlyLetters)
         .required(required),
       type: Yup.string(),
       age: Yup.number().min(minAge, ageError).required(required),
@@ -40,7 +42,6 @@ export const CreateAnimalForm = ({ variant }: CreateAnimalFormType) => {
 
     onSubmit: async (values: FormType, { resetForm }) => {
       if (values.name || values.age || values.type) {
-        // updateData(values);
         postAction({ variant, values });
         resetForm();
       } else {

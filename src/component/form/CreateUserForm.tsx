@@ -2,22 +2,25 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { CustomButton } from '../CustomButton';
 import { postAction } from '../../api/actions/postAction';
+import {
+  required,
+  onlyLetters,
+  minLetterName,
+  minLetterNameError,
+} from '../../constants';
+
 
 type CreateUserFormType = {
   variant: string;
 };
 
+type FormType = {
+  name: string;
+  gender: string;
+  banned: false;
+};
 export const CreateUserForm = ({ variant }: CreateUserFormType) => {
-  const minLetterName = 4;
-  const minLetterNameError = ` min ${minLetterName} characters`;
-  const onlyLetterError = 'Only letters';
-  const required = 'Is required';
 
-  type FormType = {
-    name: string;
-    gender: string;
-    banned: false;
-  };
 
   const formik = useFormik<FormType>({
     initialValues: {
@@ -28,7 +31,7 @@ export const CreateUserForm = ({ variant }: CreateUserFormType) => {
     validationSchema: Yup.object({
       name: Yup.string()
         .min(minLetterName, minLetterNameError)
-        .matches(/^[A-Za-z\s]+$/, onlyLetterError)
+        .matches(/^[A-Za-z\s]+$/, onlyLetters)
         .required(required),
       gender: Yup.string(),
     }),
@@ -36,7 +39,6 @@ export const CreateUserForm = ({ variant }: CreateUserFormType) => {
     onSubmit: async (values: FormType, { resetForm }) => {
       if (values.name || values.gender) {
         postAction({ variant, values });
-
       } else {
         console.log('error');
         return;
