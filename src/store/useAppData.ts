@@ -4,6 +4,7 @@ import { type DataType } from '../type';
 type UseAppDataType = {
   data: DataType[];
   filterData: DataType[];
+  error: boolean;
   setData: (data: DataType[]) => void;
   deleteData: (id: string) => void;
   updateData: (item: DataType) => void;
@@ -11,11 +12,13 @@ type UseAppDataType = {
   editItem: (id: string, changeItem: DataType) => void;
   filterItems: (itemName: string) => void;
   updatePostData: (oneItem: DataType) => void;
+  setError: (value: boolean) => void
 };
 
 export const useAppData = create<UseAppDataType>()((set) => ({
   data: [],
   filterData: [],
+  error: false,
 
   setData: (data) =>
     set(() => ({
@@ -25,8 +28,8 @@ export const useAppData = create<UseAppDataType>()((set) => ({
 
   updatePostData: (oneItem) =>
     set((state) => ({
-      data: [ ...state.data, oneItem],
-      filterData: [ ...state.filterData, oneItem],
+      data: [oneItem, ...state.data],
+      filterData: [oneItem, ...state.filterData],
     })),
 
   filterItems: (itemName) =>
@@ -58,5 +61,10 @@ export const useAppData = create<UseAppDataType>()((set) => ({
       filterData: state.filterData.map((oneItem) =>
         oneItem.id === id ? { ...oneItem, ...changeItem } : oneItem
       ),
+    })),
+
+  setError: (value) =>
+    set(() => ({
+      error: value,
     })),
 }));
