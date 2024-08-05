@@ -2,9 +2,14 @@ import axios from 'axios';
 import { API_URL } from '../url';
 import { useEffect } from 'react';
 import { useAppData } from '../../store/useAppData';
-// import { postAction } from './postAction';
 
-export const useGetAction = (variant: string) => {
+type UseGetActionType = {
+  variant: string;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setError: React.Dispatch<unknown>;
+};
+
+export const useGetAction = ({ variant, setLoading, setError }: UseGetActionType) => {
   const setAppData = useAppData((state) => state.setData);
 
   useEffect(() => {
@@ -14,10 +19,13 @@ export const useGetAction = (variant: string) => {
         const data = response.data;
         setAppData(data);
       } catch (e) {
+        setError(e)
         console.log('ERROR', e);
+      } finally {
+        setLoading(false);
       }
     };
 
     getData();
-  }, [variant, setAppData]);
+  }, [variant, setAppData, setLoading]);
 };
