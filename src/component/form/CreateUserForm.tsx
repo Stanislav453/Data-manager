@@ -90,7 +90,7 @@ export const CreateUserForm = ({ variant }: CreateUserFormType) => {
         type='button'
         action={formik.submitForm}
       >
-        Cereate item
+        Cereate user
       </CustomButton>
     </form>
   );
